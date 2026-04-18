@@ -29,7 +29,7 @@ jobs:
     - name: Criar artefato (simples)
       run: |
         mkdir dist
-        cp app.py dist/
+        cp **.py dist/
         echo "Build gerado em $(date)" > dist/version.txt
 
     - name: Upload do artefato
