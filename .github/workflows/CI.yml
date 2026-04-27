@@ -4,52 +4,46 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout do Código
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.14.4'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          # Se tiver requirements.txt, use: pip install -r requirements.txt
 
-    - name: Run tests
-      run: |
-        pytest || true
+      - name: Run tests
+        run: pytest
 
-  Docker:
+
+  docker-build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: Actions/checkout@v4
+        uses: actions/checkout@v4
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Build
         uses: docker/build-push-action@v6
         with:
           context: .
           push: false
-          tags: user/app:latest
-
-  Pytest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Instalar dependências
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest
-
-      - name: Executar todos os testes
-        run: |
-          pytest
+          tags: guilherme/app:latest
