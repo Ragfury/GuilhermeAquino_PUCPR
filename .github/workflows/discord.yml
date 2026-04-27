@@ -1,18 +1,21 @@
-  @@ -0,0 +1,15 @@
+name: Teste Discord Webhook
 
-name: Discord
 on:
-  - push
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  discord:
+  discord-test:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Run Discord Webhook
-      uses: Sniddl/discord-commits@v1.6
-      with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        template: "avatar-with-link"
-        include-extras: true
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Enviar notificação simples
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          content: "Opa! O GitHub Actions acabou de rodar no repositório: ${{ github.repository }}"
+          title: "Deploy/Push Detectado"
