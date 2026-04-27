@@ -50,6 +50,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
 
-      - name: Executar testes com Pytest
+      - name: Executar todos os testes
         run: |
-          pytest test_projeto.py
+          pytest
