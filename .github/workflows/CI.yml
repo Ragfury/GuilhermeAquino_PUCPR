@@ -52,4 +52,4 @@ jobs:
 
       - name: Executar testes com Pytest
         run: |
-          pytest test_main.py
+          pytest test_projeto.py
